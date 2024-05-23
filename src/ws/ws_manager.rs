@@ -26,7 +26,7 @@ struct SubscriptionData {
     subscription_id: u32,
 }
 pub(crate) struct WsManager {
-    writer: SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, protocol::Message>,
+    writer: Arc<Mutex<SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, protocol::Message>>>,
     subscriptions: Arc<Mutex<HashMap<String, Vec<SubscriptionData>>>>,
     subscription_id: u32,
     subscription_identifiers: HashMap<u32, String>,
@@ -57,6 +57,7 @@ pub enum Message {
     Candle(Candle),
     SubscriptionResponse,
     OrderUpdates(OrderUpdates),
+    Pong,
 }
 
 #[derive(Serialize)]
@@ -72,6 +73,7 @@ impl WsManager {
             .map_err(|e| Error::Websocket(e.to_string()))?;
 
         let (writer, mut reader) = ws_stream.split();
+        let writer = Arc::new(Mutex::new(writer));
 
         let subscriptions_map: HashMap<String, Vec<SubscriptionData>> = HashMap::new();
         let subscriptions = Arc::new(Mutex::new(subscriptions_map));
@@ -87,6 +89,22 @@ impl WsManager {
             }
         };
         spawn(reader_fut);
+
+        let writer_clone = Arc::clone(&writer);
+        let ping_fut = async move {
+            loop {
+                let mut writer_lock = writer_clone.lock().await;
+                let ping_message = serde_json::json!({ "method": "ping" });
+                if let Err(e) = writer_lock
+                    .send(protocol::Message::Text(ping_message.to_string()))
+                    .await
+                {
+                    error!("Failed to send ping: {e}");
+                }
+                tokio::time::sleep(tokio::time::Duration::from_secs(50)).await;
+            }
+        };
+        spawn(ping_fut);
 
         Ok(WsManager {
             writer,
@@ -122,7 +140,7 @@ impl WsManager {
             })
             .map_err(|e| Error::JsonParse(e.to_string())),
             Message::OrderUpdates(_) => Ok("orderUpdates".to_string()),
-            Message::SubscriptionResponse => Ok(String::default()),
+            Message::SubscriptionResponse | Message::Pong => Ok(String::default()),
         }
     }
 
@@ -197,7 +215,8 @@ impl WsManager {
             })
             .map_err(|e| Error::JsonParse(e.to_string()))?;
 
-            self.writer
+            let mut writer_lock = self.writer.lock().await;
+            writer_lock
                 .send(protocol::Message::Text(payload))
                 .await
                 .map_err(|e| Error::Websocket(e.to_string()))?;
@@ -257,7 +276,8 @@ impl WsManager {
             })
             .map_err(|e| Error::JsonParse(e.to_string()))?;
 
-            self.writer
+            let mut writer_lock = self.writer.lock().await;
+            writer_lock
                 .send(protocol::Message::Text(payload))
                 .await
                 .map_err(|e| Error::Websocket(e.to_string()))?;
