@@ -101,6 +101,7 @@ impl WsManager {
                 {
                     error!("Failed to send ping: {e}");
                 }
+                drop(writer_lock);
                 tokio::time::sleep(tokio::time::Duration::from_secs(50)).await;
             }
         };
