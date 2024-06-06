@@ -7,7 +7,7 @@ use crate::{
     prelude::*,
     req::HttpClient,
     ws::{Subscription, WsManager},
-    BaseUrl, Error, Message,
+    BaseUrl, Error, Message, UserSpotStateResponse,
 };
 
 use ethers::types::H160;
@@ -31,6 +31,10 @@ pub struct CandleSnapshotRequest {
 pub enum InfoRequest {
     #[serde(rename = "clearinghouseState")]
     UserState {
+        user: H160,
+    },
+    #[serde(rename = "spotClearinghouseState")]
+    UserSpotState {
         user: H160,
     },
     #[serde(rename = "batchClearinghouseStates")]
@@ -124,6 +128,14 @@ impl InfoClient {
 
     pub async fn user_state(&self, address: H160) -> Result<UserStateResponse> {
         let input = InfoRequest::UserState { user: address };
+        let data = serde_json::to_string(&input).map_err(|e| Error::JsonParse(e.to_string()))?;
+
+        let return_data = self.http_client.post("/info", data).await?;
+        serde_json::from_str(&return_data).map_err(|e| Error::JsonParse(e.to_string()))
+    }
+
+    pub async fn user_spot_state(&self, address: H160) -> Result<UserSpotStateResponse> {
+        let input = InfoRequest::UserSpotState { user: address };
         let data = serde_json::to_string(&input).map_err(|e| Error::JsonParse(e.to_string()))?;
 
         let return_data = self.http_client.post("/info", data).await?;

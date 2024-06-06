@@ -1,4 +1,7 @@
-use crate::info::{AssetPosition, Level, MarginSummary};
+use crate::{
+    info::{AssetPosition, Level, MarginSummary},
+    SpotBalance,
+};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -8,6 +11,12 @@ pub struct UserStateResponse {
     pub cross_margin_summary: MarginSummary,
     pub margin_summary: MarginSummary,
     pub withdrawable: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct UserSpotStateResponse {
+    pub balances: Vec<SpotBalance>,
 }
 
 #[derive(serde::Deserialize, Debug)]

@@ -31,6 +31,14 @@ pub struct AssetPosition {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct SpotBalance {
+    pub coin: String,
+    pub total: String,
+    pub hold: String,
+    pub token: u64,
+}
+
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginSummary {
     pub account_value: String,
