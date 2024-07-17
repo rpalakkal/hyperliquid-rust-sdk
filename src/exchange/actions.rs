@@ -308,7 +308,7 @@ pub struct NetChildVaultPositionsAction {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SetGlobalAction {
-    pub pxs: Vec<(String, String)>,
+    pub pxs: Vec<(Option<String>, String)>,
     pub external_perp_pxs: Vec<(String, String)>,
 }
 
@@ -322,7 +322,7 @@ pub struct EthRawTx {
 #[serde(rename_all = "camelCase")]
 pub struct VoteEthDepositAction {
     pub user: H160,
-    pub amount: u32,
+    pub usd: u32,
     pub eth_id: EthId,
 }
 
