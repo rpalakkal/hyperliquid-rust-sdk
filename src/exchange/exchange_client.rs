@@ -64,6 +64,7 @@ pub enum Actions {
     SetReferrer(SetReferrer),
     Modify(ModifyOrderRequest),
     BatchModify(BatchModify),
+    #[serde(rename = "NetChildVaultPositionsAction")]
     NetChildVaultPositionsAction(NetChildVaultPositionsAction),
 }
 
