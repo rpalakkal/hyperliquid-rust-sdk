@@ -1,4 +1,3 @@
-use crate::exchange::{cancel::CancelRequest, order::OrderRequest};
 pub(crate) use ethers::{
     abi::{encode, ParamType, Tokenizable},
     types::{
@@ -13,6 +12,10 @@ pub(crate) use ethers::{
 use serde::{Deserialize, Serialize};
 
 use super::cancel::CancelRequestCloid;
+use crate::{
+    exchange::{cancel::CancelRequest, order::OrderRequest},
+    ModifyOrderRequest,
+};
 
 pub(crate) const HYPERLIQUID_EIP_PREFIX: &str = "HyperliquidTransaction:";
 
@@ -99,6 +102,12 @@ pub struct UpdateIsolatedMargin {
 pub struct BulkOrder {
     pub orders: Vec<OrderRequest>,
     pub grouping: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct BatchModify {
+    pub modifies: Vec<ModifyOrderRequest>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

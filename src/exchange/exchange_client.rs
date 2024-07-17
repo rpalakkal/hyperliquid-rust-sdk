@@ -1,4 +1,15 @@
-use crate::signature::sign_typed_data;
+use std::collections::HashMap;
+
+use ethers::{
+    abi::AbiEncode,
+    signers::{LocalWallet, Signer},
+    types::{Signature, H160, H256},
+};
+use log::debug;
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
+
+use super::cancel::ClientCancelRequestCloid;
 use crate::{
     exchange::{
         actions::{
@@ -13,21 +24,10 @@ use crate::{
     meta::Meta,
     prelude::*,
     req::HttpClient,
-    signature::sign_l1_action,
-    BaseUrl, BulkCancelCloid, Error, ExchangeResponseStatus,
+    signature::{sign_l1_action, sign_typed_data},
+    BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, ExchangeResponseStatus,
+    ModifyOrderRequest, SpotSend, SpotUser, VaultTransfer, Withdraw3,
 };
-use crate::{ClassTransfer, SpotSend, SpotUser, VaultTransfer, Withdraw3};
-use ethers::{
-    abi::AbiEncode,
-    signers::{LocalWallet, Signer},
-    types::{Signature, H160, H256},
-};
-use log::debug;
-use reqwest::Client;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
-use super::cancel::ClientCancelRequestCloid;
 
 pub struct ExchangeClient {
     pub http_client: HttpClient,
@@ -62,6 +62,8 @@ pub enum Actions {
     VaultTransfer(VaultTransfer),
     SpotSend(SpotSend),
     SetReferrer(SetReferrer),
+    Modify(ModifyOrderRequest),
+    BatchModify(BatchModify),
 }
 
 impl Actions {

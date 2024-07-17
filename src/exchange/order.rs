@@ -1,11 +1,13 @@
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
+
 use crate::{
     errors::Error,
     helpers::{float_to_string_for_hashing, uuid_to_hex_string},
     prelude::*,
 };
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use uuid::Uuid;
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Limit {
@@ -44,6 +46,13 @@ pub struct OrderRequest {
     pub order_type: Order,
     #[serde(rename = "c", alias = "cloid", skip_serializing_if = "Option::is_none")]
     pub cloid: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ModifyOrderRequest {
+    pub oid: String,
+    pub order: OrderRequest,
 }
 
 pub struct ClientLimit {
