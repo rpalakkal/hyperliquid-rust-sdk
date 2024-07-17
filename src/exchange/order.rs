@@ -111,3 +111,20 @@ impl ClientOrderRequest {
         })
     }
 }
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TwapOrderRequest {
+    #[serde(rename = "a", alias = "asset")]
+    pub asset: u32,
+    #[serde(rename = "b", alias = "isBuy")]
+    pub is_buy: bool,
+    #[serde(rename = "m")]
+    pub duration: u32,
+    #[serde(rename = "r", alias = "reduceOnly", default)]
+    pub reduce_only: bool,
+    #[serde(rename = "s", alias = "sz")]
+    pub sz: String,
+    #[serde(rename = "t")]
+    pub randomize: bool,
+}

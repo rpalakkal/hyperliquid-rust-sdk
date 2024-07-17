@@ -14,13 +14,12 @@ async fn main() {
         .await
         .unwrap();
 
-    let usd = "1"; // 1 USD
     let is_deposit = true;
 
     let res = exchange_client
         .vault_transfer(
             is_deposit,
-            usd.to_string(),
+            1000000, // 1 USD
             Some(
                 "0x1962905b0a2d0ce7907ae1a0d17f3e4a1f63dfb7"
                     .parse()

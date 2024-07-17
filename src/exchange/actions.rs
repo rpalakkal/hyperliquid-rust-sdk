@@ -1,4 +1,4 @@
-use ethers::types::{Bytes, H256};
+use ethers::types::{Address, Bytes, H256};
 pub(crate) use ethers::{
     abi::{encode, ParamType, Tokenizable},
     types::{
@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use super::cancel::CancelRequestCloid;
 use crate::{
     exchange::{cancel::CancelRequest, order::OrderRequest},
-    ModifyOrderRequest,
+    ModifyOrderRequest, TwapOrderRequest,
 };
 
 pub(crate) const HYPERLIQUID_EIP_PREFIX: &str = "HyperliquidTransaction:";
@@ -345,4 +345,66 @@ pub struct ScheduleCancel {
 pub struct VaultDistribute {
     pub vault_address: H160,
     pub usd: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub enum SpotDeployAction {
+    RegisterToken2(RegisterToken2),
+    UserGenesis(UserGenesis),
+    Genesis(Genesis),
+    RegisterSpot(RegisterSpot),
+    RegisterHyperliquidity(RegisterHyperliquidity),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterToken2 {
+    spec: TokenSpec,
+    max_gas: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TokenSpec {
+    name: String,
+    sz_decimals: u32,
+    wei_decimals: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UserGenesis {
+    token: u32,
+    user_and_wei: Vec<(Address, String)>,
+    existing_token_and_wei: Vec<(u32, String)>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Genesis {
+    token: u32,
+    max_supply: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterSpot {
+    tokens: [u32; 2],
+    initial_trade_px: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterHyperliquidity {
+    spot: u32,
+    start_px: String,
+    order_sz: String,
+    n_seeded_levels: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TwapAction {
+    twap: TwapOrderRequest,
 }
