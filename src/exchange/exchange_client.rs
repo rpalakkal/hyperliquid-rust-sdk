@@ -27,7 +27,7 @@ use crate::{
     signature::{sign_l1_action, sign_typed_data},
     BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, EthRawTx, ExchangeResponseStatus,
     ModifyOrderRequest, NetChildVaultPositionsAction, SetGlobalAction, SpotSend, SpotUser,
-    VaultTransfer, Withdraw3,
+    VaultTransfer, VoteEthDepositAction, Withdraw3,
 };
 
 pub struct ExchangeClient {
@@ -70,6 +70,8 @@ pub enum Actions {
     NetChildVaultPositionsAction(NetChildVaultPositionsAction),
     #[serde(rename = "SetGlobalAction")]
     SetGlobalAction(SetGlobalAction),
+    #[serde(rename = "VoteEthDepositAction")]
+    VoteEthDepositAction(VoteEthDepositAction),
 }
 
 impl Actions {

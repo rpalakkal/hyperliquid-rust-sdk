@@ -1,4 +1,4 @@
-use ethers::types::Bytes;
+use ethers::types::{Bytes, H256};
 pub(crate) use ethers::{
     abi::{encode, ParamType, Tokenizable},
     types::{
@@ -316,4 +316,21 @@ pub struct SetGlobalAction {
 #[serde(rename_all = "camelCase")]
 pub struct EthRawTx {
     pub data: Bytes,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct VoteEthDepositAction {
+    pub user: H160,
+    pub amount: u32,
+    pub eth_id: EthId,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EthId {
+    pub block_number: u64,
+    pub tx_index: u64,
+    pub event_type: String,
+    pub event_index: u64,
+    pub tx_hash: H256,
 }
