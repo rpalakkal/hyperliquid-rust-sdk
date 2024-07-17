@@ -48,10 +48,17 @@ pub struct OrderRequest {
     pub cloid: Option<String>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(untagged)]
+pub enum OidOrCloid {
+    Oid(u64),
+    Cloid(String),
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ModifyOrderRequest {
-    pub oid: String,
+    pub oid: OidOrCloid,
     pub order: OrderRequest,
 }
 
