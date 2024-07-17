@@ -25,7 +25,7 @@ use crate::{
     prelude::*,
     req::HttpClient,
     signature::{sign_l1_action, sign_typed_data},
-    BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, ExchangeResponseStatus,
+    BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, EthRawTx, ExchangeResponseStatus,
     ModifyOrderRequest, NetChildVaultPositionsAction, SetGlobalAction, SpotSend, SpotUser,
     VaultTransfer, Withdraw3,
 };
@@ -65,6 +65,7 @@ pub enum Actions {
     SetReferrer(SetReferrer),
     Modify(ModifyOrderRequest),
     BatchModify(BatchModify),
+    EthRawTx(EthRawTx),
     #[serde(rename = "NetChildVaultPositionsAction")]
     NetChildVaultPositionsAction(NetChildVaultPositionsAction),
     #[serde(rename = "SetGlobalAction")]

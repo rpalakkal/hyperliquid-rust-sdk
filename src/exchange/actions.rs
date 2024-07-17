@@ -1,3 +1,4 @@
+use ethers::types::Bytes;
 pub(crate) use ethers::{
     abi::{encode, ParamType, Tokenizable},
     types::{
@@ -309,4 +310,10 @@ pub struct NetChildVaultPositionsAction {
 pub struct SetGlobalAction {
     pub pxs: Vec<(String, String)>,
     pub external_perp_pxs: Vec<(String, String)>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct EthRawTx {
+    pub data: Bytes,
 }
