@@ -289,7 +289,7 @@ pub struct ClassTransfer {
 pub struct VaultTransfer {
     pub vault_address: H160,
     pub is_deposit: bool,
-    pub usd: String,
+    pub usd: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -333,4 +333,16 @@ pub struct EthId {
     pub event_type: String,
     pub event_index: u64,
     pub tx_hash: H256,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ScheduleCancel {
+    pub time: Option<u64>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct VaultDistribute {
+    pub vault_address: H160,
+    pub usd: u32,
 }

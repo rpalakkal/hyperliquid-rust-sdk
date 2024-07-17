@@ -26,8 +26,8 @@ use crate::{
     req::HttpClient,
     signature::{sign_l1_action, sign_typed_data},
     BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, EthRawTx, ExchangeResponseStatus,
-    ModifyOrderRequest, NetChildVaultPositionsAction, SetGlobalAction, SpotSend, SpotUser,
-    VaultTransfer, VoteEthDepositAction, Withdraw3,
+    ModifyOrderRequest, NetChildVaultPositionsAction, ScheduleCancel, SetGlobalAction, SpotSend,
+    SpotUser, VaultDistribute, VaultTransfer, VoteEthDepositAction, Withdraw3,
 };
 
 pub struct ExchangeClient {
@@ -61,11 +61,13 @@ pub enum Actions {
     Withdraw3(Withdraw3),
     SpotUser(SpotUser),
     VaultTransfer(VaultTransfer),
+    VaultDistribute(VaultDistribute),
     SpotSend(SpotSend),
     SetReferrer(SetReferrer),
     Modify(ModifyOrderRequest),
     BatchModify(BatchModify),
     EthRawTx(EthRawTx),
+    ScheduleCancel(ScheduleCancel),
     #[serde(rename = "NetChildVaultPositionsAction")]
     NetChildVaultPositionsAction(NetChildVaultPositionsAction),
     #[serde(rename = "SetGlobalAction")]
@@ -209,7 +211,7 @@ impl ExchangeClient {
     pub async fn vault_transfer(
         &self,
         is_deposit: bool,
-        usd: String,
+        usd: u32,
         vault_address: Option<H160>,
         wallet: Option<&LocalWallet>,
     ) -> Result<ExchangeResponseStatus> {
