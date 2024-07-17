@@ -303,3 +303,10 @@ pub struct NetChildVaultPositionsAction {
     pub child_vault_addresses: Vec<H160>,
     pub assets: Vec<u32>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SetGlobalAction {
+    pub pxs: Vec<(String, String)>,
+    pub external_perp_pxs: Vec<(String, String)>,
+}
