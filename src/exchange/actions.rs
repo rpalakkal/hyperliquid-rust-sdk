@@ -408,3 +408,9 @@ pub struct RegisterHyperliquidity {
 pub struct TwapAction {
     twap: TwapOrderRequest,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SetDisplayNameAction {
+    display_name: String,
+}

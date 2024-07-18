@@ -26,9 +26,9 @@ use crate::{
     req::HttpClient,
     signature::{sign_l1_action, sign_typed_data},
     BaseUrl, BatchModify, BulkCancelCloid, ClassTransfer, Error, EthRawTx, ExchangeResponseStatus,
-    ModifyOrderRequest, NetChildVaultPositionsAction, ScheduleCancel, SetGlobalAction,
-    SpotDeployAction, SpotSend, SpotUser, TwapAction, VaultDistribute, VaultTransfer,
-    VoteEthDepositAction, Withdraw3,
+    ModifyOrderRequest, NetChildVaultPositionsAction, ScheduleCancel, SetDisplayNameAction,
+    SetGlobalAction, SpotDeployAction, SpotSend, SpotUser, TwapAction, VaultDistribute,
+    VaultTransfer, VoteEthDepositAction, Withdraw3,
 };
 
 pub struct ExchangeClient {
@@ -77,6 +77,7 @@ pub enum Actions {
     VoteEthDepositAction(VoteEthDepositAction),
     SpotDeploy(SpotDeployAction),
     TwapOrder(TwapAction),
+    SetDisplayName(SetDisplayNameAction),
 }
 
 impl Actions {
