@@ -414,3 +414,22 @@ pub struct TwapAction {
 pub struct SetDisplayNameAction {
     display_name: String,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub enum VoteGlobalAction {
+    SpotDeployGasAuctionChange(SpotDeployGasAuctionChange),
+    FreezeChain(u64),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SpotDeployGasAuctionChange {
+    pub enable_and_restart: SpotDeployGasActionOptions,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SpotDeployGasActionOptions {
+    pub duration_seconds: u64,
+    pub start_gas: Option<u64>,
+}
