@@ -420,6 +420,7 @@ pub struct SetDisplayNameAction {
 pub enum VoteGlobalAction {
     SpotDeployGasAuctionChange(SpotDeployGasAuctionChange),
     FreezeChain(u64),
+    AssetsAtOpenInterestCap(Vec<u32>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
